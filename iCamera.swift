@@ -77,7 +77,7 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
     var device_focus_point_of_interest: CGPoint = CGPoint.zero
     var update_focus_time: Int = 10
     func object_timer() {
-        DispatchQueue.delay(time: 0.5, run: { [weak self] in
+        DispatchQueue.delay(0.5, execute: { [weak self] in
             if let point = self?.device?.focusPointOfInterest, let focus = self?.device_focus_point_of_interest {
                 if focus != point {
                     self?.device_focus_point_of_interest = point
@@ -145,8 +145,7 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
             session.addOutput(photo_output)
             session.addInput(audio_device_input!)
             session.addOutput(moive_file_output)
-        }
-        else {
+        } else {
             return false
         }
         
@@ -224,8 +223,7 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
         if is_recording {
             record_complete = complete
             moive_file_output.stopRecording()
-        }
-        else {
+        } else {
             complete?(nil, NSError(domain: "没有在录像中", code: 400, userInfo: nil))
         }
     }
@@ -239,12 +237,10 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         if error != nil {
             record_complete?(outputFileURL, error)
-        }
-        else {
+        } else {
             if let complete = record_complete {
                 complete(outputFileURL, nil)
-            }
-            else {
+            } else {
                 iCamera.request_photo_authorization(complete: {
                     if $0 {
                         PHPhotoLibrary.shared().performChanges({
@@ -293,8 +289,7 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
             
             camera_changed_animation()
             return true
-        }
-        else {
+        } else {
             return false
         }
     }
@@ -408,7 +403,7 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
     func camera_focus_animation_time_run() {
         self.camera_focus_animation_time -= 1
         if camera_focus_animation_time > 0 {
-            DispatchQueue.delay(time: 1, run: { [weak self] in
+            DispatchQueue.delay(1, execute: { [weak self] in
                 self?.camera_focus_animation_time_run()
             })
         }
@@ -454,7 +449,7 @@ class iCamera: UIView, AVCapturePhotoCaptureDelegate, AVCaptureFileOutputRecordi
     
     /** 输出信息 */
     func log_message(_ value: Any?) {
-        log_tools.print_log(flag: 10, message: value)
+        print(String.init(describing: value))
     }
     
     /** 搜索摄像头 */
